@@ -187,8 +187,7 @@ void setup() {
   Serial.begin(9600);
   while(!Serial);
   Wire.setModule(1);
-  Wire.begin(slaveAddress);
-  Wire.onReceive(receberEventoI2C);
+  Wire.begin();
   Serial.print(F("Compilado em: "));
   Serial.print(__DATE__);
   Serial.print(F(" - "));
