@@ -8,20 +8,20 @@
 /**
  * Pino onde o pino de sinal do DHT22 está conectado
  * */
-#define DHT_PIN 47
+#define DHT_PIN PA_5
 
 /**
  * Pino de sinal do pluviometro
  * 
  **/
-#define PLUVI_PIN 3
+#define PLUVI_PIN PB_0
 
 /**₢
  * pino que está conectado ao SQW do RTC
  * */
-#define pinoRTCSquareWave 2
+#define pinoRTCSquareWave PB_1
 
-#define CS_SDCARD 53
+#define CS_SDCARD PB_5
 
 
 /** 

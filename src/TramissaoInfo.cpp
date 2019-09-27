@@ -2,7 +2,7 @@
 #include "IntegracaoDados.h"
 #include <Arduino.h>
 
-HardwareSerial *serialMestre = &Serial2;
+HardwareSerial *serialMestre = &Serial1;
 
 bool iniciarPortaSerialMestre()
 {

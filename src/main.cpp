@@ -189,8 +189,9 @@ void setup() {
   Wire.begin(1);
   
   
-  Serial.print("Compilado em: ");
+  Serial.print(F("Compilado em: "));
   Serial.print(__DATE__);
+  Serial.print(F(" - "));
   Serial.println(__TIME__);
 
   for (i = 0; i < TAM_BUFFER; i++)
@@ -200,15 +201,17 @@ void setup() {
   }
   
   do
-     Serial.println("Iniciando comunicação com mestre");
+     Serial.println(F("Iniciando porta serial de conexao com mestre"));
   while ( ! iniciarPortaSerialMestre());
-  
+  Serial.println(F("conexão serial iniciada"));
   avisarInicio();
-  
+  Serial.println(F("Mestre avisado do início"));
+
   // ajuste de pinos
   pinMode(pinoRTCSquareWave, INPUT);
   pinMode(PLUVI_PIN, INPUT);
-
+  Serial.println(F("Iniciando RTC "));
+  Wire.begin(1);
   rtc.Begin();
 
   RtcDateTime compilador = RtcDateTime(__DATE__,__TIME__);  
@@ -243,14 +246,14 @@ void setup() {
   rtc.LatchAlarmsTriggeredFlags();
 
   // ativando as interrupções 
-  attachInterrupt(digitalPinToInterrupt(pinoRTCSquareWave), RotinaInterrupcaoAlarm, FALLING);
-  attachInterrupt(digitalPinToInterrupt(PLUVI_PIN), CapturarOscilacao, FALLING);
+  attachInterrupt(pinoRTCSquareWave, RotinaInterrupcaoAlarm, FALLING);
+  attachInterrupt(PLUVI_PIN, CapturarOscilacao, FALLING);
   
-  Serial.println("Iniciando o sistema de coleta de dados (escravo) ");
-  Serial.println("Sistema de coleta de sensores");
+
 
   // iniciando SD Card
   Serial.println(F("Verificando SD Card"));
+  SPI.setModule(2);
   i = 0;
   while ( i == 0 )
   {
@@ -263,16 +266,16 @@ void setup() {
         i++;
       }
       i = 0;
-      Serial.print("Nova tentativa de ativar cartão");
+      Serial.print(F("Nova tentativa de ativar cartão"));
 
     }  
     else
     {
-      Serial.println("Cartão inicializado.");
+      Serial.println(F("Cartão inicializado."));
       File t = SD.open("inicio.txt",FILE_WRITE);
       if ( t )
       {
-        Serial.println("Arquivo inicio ok");
+        Serial.println(F("Arquivo inicio ok"));
         t.println(instante);
         t.close();    
       }
@@ -288,6 +291,9 @@ void setup() {
   sensorHT.begin();
   Serial.println("Umidade :" + String(sensorHT.readHumidity()));
   Serial.println("Temperatura: "+ String(sensorHT.readTemperature()));
+
+  Serial.println(F("Iniciando o sistema de coleta de dados (escravo Tiva) "));
+  Serial.println(F("Sistema de coleta de sensores"));
 
   }
 
