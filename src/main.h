@@ -104,6 +104,12 @@ void help();
 String obterParametroSerial(int nroParam );
 
 /**
+ * Rotina para tratar eventos de i2c entre microcontroladores
+ **/
+void receberEventoI2C(int qtos);
+
+
+/**
  * Rotina chamada na interrupção do RTC
  * */
 void   RotinaInterrupcaoAlarm();

@@ -186,9 +186,9 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   while(!Serial);
-  Wire.begin(1);
-  
-  
+  Wire.setModule(1);
+  Wire.begin(slaveAddress);
+  Wire.onReceive(receberEventoI2C);
   Serial.print(F("Compilado em: "));
   Serial.print(__DATE__);
   Serial.print(F(" - "));
@@ -249,7 +249,6 @@ void setup() {
   attachInterrupt(pinoRTCSquareWave, RotinaInterrupcaoAlarm, FALLING);
   attachInterrupt(PLUVI_PIN, CapturarOscilacao, FALLING);
   
-
 
   // iniciando SD Card
   Serial.println(F("Verificando SD Card"));
@@ -333,7 +332,17 @@ String obterParametroSerial(int nroParam )
   return tmp;
 }
 
-
+/**
+ * Rotina para tratar eventos de i2c entre microcontroladores
+ **/
+void receberEventoI2C(int qtos)
+{
+  String msg;
+  if (Wire.available() ){
+    msg = Wire.readString();
+    Serial.println("Msg I2C: " +  msg );
+  }
+}
 
 /*************************************************************************************
  * Funçao para tratar os dados recebidos pela porta serial
@@ -466,6 +475,7 @@ String DateTime2String( RtcDateTime i )
            i.Day(), i.Month(), i.Year(), i.Hour(), i.Minute(), i.Second());
   return String(datetimeStr);
 }
+
 
 
 /**

@@ -2,6 +2,9 @@
 #define __INTEGRACAODADOS_H__
 
 #include <Arduino.h>
+
+const uint8_t slaveAddress = 0x69;
+
 /**
  * Tipo para trabalhar dados do DHT
  **/
