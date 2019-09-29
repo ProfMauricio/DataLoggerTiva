@@ -178,6 +178,7 @@ void CapturarOscilacao()
 void setup() {
 
   int i  ;
+  unsigned long inicio, duracao ;
   contadorPluviometro = 0;
 
   // ajustes no lcd do msp430fr6989
@@ -193,18 +194,38 @@ void setup() {
   Serial.print(F(" - "));
   Serial.println(__TIME__);
 
+  inicio = millis();
+  i = 0;
+  do 
+  {
+    duracao = millis() - inicio;
+    int temp = duracao / 1000;
+    if ( i < temp )
+    {
+      Serial.print("Aguardando (" ) ;
+      Serial.print(i) ;
+      Serial.println(")");
+      i = temp;
+    }
+  }
+  while( duracao < 10000);
+
+  do
+     Serial.println(F("Iniciando porta serial de conexao com mestre"));
+  while ( ! iniciarPortaSerialMestre());
+  Serial.println(F("conexão serial iniciada"));
+
   for (i = 0; i < TAM_BUFFER; i++)
   {
       bufferPluviometro[i].pulsos = 0;
       bufferVento[i].pulsos = 0;
   }
   
-  do
-     Serial.println(F("Iniciando porta serial de conexao com mestre"));
-  while ( ! iniciarPortaSerialMestre());
-  Serial.println(F("conexão serial iniciada"));
-  avisarInicio();
-  Serial.println(F("Mestre avisado do início"));
+
+  if ( avisarInicio() )
+    Serial.println(F("Mestre avisado do inicio"));
+  else 
+    Serial.println(F("Falha na comunicacao inicial"));
 
   // ajuste de pinos
   pinMode(pinoRTCSquareWave, INPUT);
@@ -329,7 +350,7 @@ String obterParametroSerial(int nroParam )
     break;
   }
   return tmp;
-}
+} 
 
 /**
  * Rotina para tratar eventos de i2c entre microcontroladores

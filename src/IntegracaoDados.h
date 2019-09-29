@@ -39,7 +39,7 @@ typedef struct  Vento_Data {
 /**
  * Velocidade de comunicação com o outro microcontrolador
  * */
-#define VELOCIDADE_COMM 9600
+#define VELOCIDADE_COMM 115200
 
 
 const char startMsg = '@';

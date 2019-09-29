@@ -11,11 +11,43 @@ bool iniciarPortaSerialMestre()
     return true;
 }
 
-void avisarInicio()
+bool avisarInicio()
 {
-  serialMestre->print(startMsg);
-  serialMestre->print("init");
-  serialMestre->print(endMsg);
+  unsigned long int inicio, tempoDecorrido ;
+  bool envioOk = false;
+  String ret = "";
+  int tentativas = 0;
+  while ( !envioOk  && tentativas < MAX_TENTATIVAS )
+  {
+    serialMestre->print(startMsg);
+    serialMestre->print("INIT");
+    serialMestre->print(endMsg);
+    inicio = millis();
+    tempoDecorrido = millis() - inicio;
+    // aguardando a chegada de dados
+    while( serialMestre->available() == 0  && tempoDecorrido < TIMEOUT )
+    {
+       tempoDecorrido = millis() - inicio;
+       Serial.print(".");
+       delay(100);
+    } 
+    // saiu por chegada de dados?
+    if (tempoDecorrido < TIMEOUT)
+    {
+      ret = serialMestre->readStringUntil(endMsg);
+      Serial.print("Msg: ");
+      Serial.println(ret);
+      if ( ret == "@OK")
+        envioOk = true;
+      
+    }
+    else 
+      Serial.println("saida por timeout");
+    tentativas++;
+    Serial.print("Tentativa de aviso de inicio: ");
+    Serial.println(tentativas);    
+  }
+  return envioOk;
 }
 
 void enviarDHT(DHT_Data *bufferDHT)

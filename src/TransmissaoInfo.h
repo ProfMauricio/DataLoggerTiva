@@ -4,6 +4,9 @@
 #include "IntegracaoDados.h"
 #include <Arduino.h>
 
+const int TIMEOUT = 5000;
+const int MAX_TENTATIVAS=5;
+
 /**
  * Rotina para transmissao de dados obtidos do DHT e que estão armazenado em um buffer
  * @bufferDHT Vetor de registros com os dados obtidos a cada minuto
@@ -19,7 +22,7 @@ void enviarPluviometro(Pluvi_Data *bufferPluviometro);
 /**
  * Rotina para inicio de atividades do escrava
  **/
-void avisarInicio();
+bool avisarInicio();
 
 /**
  * Rotina para iniciar a porta serial de comunicaçao com o mestre
